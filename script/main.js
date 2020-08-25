@@ -1,22 +1,71 @@
-let numberPhone = prompt(' Введите номер.\n Например: +71234567890')
+const btnKick = document.getElementById('btn-kick')
+const btnBallLightning = document.getElementById('btn-ball_lightning')
 
-const phone = document.querySelector('.phone')
+let fatality = 0
 
-function formattedPhone(numberPhone) {
-    const reCheck = /^\+\d{11}$/
-    const re = /^(\+\d)(\d{3})(\d{3})(\d{2})(\d{2})$/
-    reCheck.test(numberPhone) ?  numberPhone = numberPhone.replace(re, '$1 ($2) $3-$4-$5') : numberPhone = formattedPhone(prompt(' Введите номер.\n Например: +71234567890'))
-    phone.textContent = numberPhone
-    return numberPhone
+const character = {
+    name: 'Pikachu',
+    defaultHP: 100,
+    damageHP: 100,
+    elHP: document.getElementById('health-character'),
+    elProgressbar: document.getElementById('progressbar-character')
 }
-numberPhone = formattedPhone(numberPhone)
-AOS.init();
-// console.log(formattedPhone('+71234567899'));
-// +80714217499
-// +71234567890
+
+const enemy = {
+    name: 'Charmander',
+    defaultHP: 100,
+    damageHP: 100,
+    elHP: document.getElementById('health-enemy'),
+    elProgressbar: document.getElementById('progressbar-enemy')
+}
+
+btnKick.addEventListener('click',function () {
+    console.log('Kick')
+    changeHP(random(15), character)
+    changeHP(random(20), enemy)
+})
+btnBallLightning.addEventListener('click', () => {
+    fatality++
+    changeHP(50, enemy, fatality)
+})
+
+function init() {
+    renderHP(character)
+    renderHP(enemy)
+}
+
+function renderHP(person) {
+    renderHPLife(person)
+    renderProgressbarHP(person)
+}
+
+function renderHPLife(person) {
+    person.elHP.innerText = person.damageHP + ' / ' + person.defaultHP
+
+}
+function renderProgressbarHP(person){
+    person.elProgressbar.style.width = person.damageHP + '%'
+}
+
+function changeHP(count, person, fatality = 0){
+   if(fatality === 1){
+       btnBallLightning.disabled = true
+   }
+    if(person.damageHP <= count){
+       person.damageHP = 0
+       alert(person.name +' проиграл')
+       btnKick.disabled = true
+   } else {
+       console.log(person.damageHP)
+       person.damageHP -= count
+   }
+
+    renderHP(person)
+}
+
+function random(num){
+    return Math.ceil(Math.random() * num)
+}
 
 
-
-
-
-
+init()
