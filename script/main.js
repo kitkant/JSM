@@ -3,12 +3,16 @@ const btnBallLightning = document.getElementById('btn-ball_lightning')
 
 let fatality = 0
 
+
 const character = {
     name: 'Pikachu',
     defaultHP: 100,
     damageHP: 100,
     elHP: document.getElementById('health-character'),
-    elProgressbar: document.getElementById('progressbar-character')
+    elProgressbar: document.getElementById('progressbar-character'),
+    renderHPLife: renderHPLife,
+    renderProgressbarHP: renderProgressbarHP,
+    changeHP: changeHP
 }
 
 const enemy = {
@@ -16,17 +20,19 @@ const enemy = {
     defaultHP: 100,
     damageHP: 100,
     elHP: document.getElementById('health-enemy'),
-    elProgressbar: document.getElementById('progressbar-enemy')
+    elProgressbar: document.getElementById('progressbar-enemy'),
+    renderHPLife: renderHPLife,
+    renderProgressbarHP: renderProgressbarHP,
+    changeHP: changeHP
 }
 
 btnKick.addEventListener('click',function () {
-    console.log('Kick')
-    changeHP(random(15), character)
-    changeHP(random(20), enemy)
+    character.changeHP(random(15))
+    enemy.changeHP(random(20))
 })
 btnBallLightning.addEventListener('click', () => {
     fatality++
-    changeHP(50, enemy, fatality)
+    enemy.changeHP(50,  fatality)
 })
 
 function init() {
@@ -34,33 +40,35 @@ function init() {
     renderHP(enemy)
 }
 
-function renderHP(person) {
-    renderHPLife(person)
-    renderProgressbarHP(person)
+function renderHP() {
+    enemy.renderHPLife()
+    character.renderHPLife()
+    enemy.renderProgressbarHP()
+    character.renderProgressbarHP()
 }
 
-function renderHPLife(person) {
-    person.elHP.innerText = person.damageHP + ' / ' + person.defaultHP
-
-}
-function renderProgressbarHP(person){
-    person.elProgressbar.style.width = person.damageHP + '%'
+function renderHPLife() {
+    this.elHP.innerText = this.damageHP + ' / ' + this.defaultHP
 }
 
-function changeHP(count, person, fatality = 0){
+function renderProgressbarHP(){
+    this.elProgressbar.style.width = this.damageHP + '%'
+}
+//1
+function changeHP(count,  fatality = 0){
    if(fatality === 1){
        btnBallLightning.disabled = true
    }
-    if(person.damageHP <= count){
-       person.damageHP = 0
-       alert(person.name +' проиграл')
+    if(this.damageHP <= count){
+       this.damageHP = 0
+       alert(this.name +' проиграл')
        btnKick.disabled = true
    } else {
-       console.log(person.damageHP)
-       person.damageHP -= count
+
+       this.damageHP -= count
    }
 
-    renderHP(person)
+    renderHP(this)
 }
 
 function random(num){
