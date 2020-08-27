@@ -6,7 +6,14 @@ html, body {
     padding: 0;
     margin: 0;
 }
-
+#logs{
+    height: 300px;
+    width: 70%;
+    margin: auto;
+    overflow: auto;
+    border-radius: 5%;
+    padding-bottom: 220px;
+}
 body {
     color: black;
     position: relative;
