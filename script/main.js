@@ -12,7 +12,8 @@ const character = {
     elProgressbar: document.getElementById('progressbar-character'),
     renderHPLife: renderHPLife,
     renderProgressbarHP: renderProgressbarHP,
-    changeHP: changeHP
+    changeHP: changeHP,
+    renderHP: renderHP
 }
 
 const enemy = {
@@ -23,10 +24,12 @@ const enemy = {
     elProgressbar: document.getElementById('progressbar-enemy'),
     renderHPLife: renderHPLife,
     renderProgressbarHP: renderProgressbarHP,
-    changeHP: changeHP
+    changeHP: changeHP,
+    renderHP: renderHP
 }
 
 btnKick.addEventListener('click',function () {
+
     character.changeHP(random(15))
     enemy.changeHP(random(20))
 })
@@ -35,27 +38,30 @@ btnBallLightning.addEventListener('click', () => {
     enemy.changeHP(50,  fatality)
 })
 
-function init() {
-    renderHP(character)
-    renderHP(enemy)
+function init(enemy, character) {
+
+    character.renderHP()
+    enemy.renderHP()
+
 }
 
 function renderHP() {
-    enemy.renderHPLife()
-    character.renderHPLife()
-    enemy.renderProgressbarHP()
-    character.renderProgressbarHP()
+
+    this.renderHPLife()
+    this.renderProgressbarHP()
+
 }
 
 function renderHPLife() {
+
     this.elHP.innerText = this.damageHP + ' / ' + this.defaultHP
 }
 
 function renderProgressbarHP(){
     this.elProgressbar.style.width = this.damageHP + '%'
 }
-//1
-function changeHP(count,  fatality = 0){
+function changeHP(count, fatality = 0){
+
    if(fatality === 1){
        btnBallLightning.disabled = true
    }
@@ -68,7 +74,7 @@ function changeHP(count,  fatality = 0){
        this.damageHP -= count
    }
 
-    renderHP(this)
+    this.renderHP()
 }
 
 function random(num){
@@ -76,4 +82,4 @@ function random(num){
 }
 
 
-init()
+init(enemy, character)
