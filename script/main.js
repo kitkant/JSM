@@ -2,8 +2,8 @@ const btnKick = document.getElementById('btn-kick')
 const btnBallLightning = document.getElementById('btn-ball_lightning')
 const logs = document.querySelector('#logs')
 
-let fatality = 0,
-    countRound = 0
+let fatality = 0
+
 
 
 const character = {
@@ -40,18 +40,19 @@ btnBallLightning.addEventListener('click', () => {
     enemy.changeHP(50,  fatality)
 })
 
-function generateLog(firstPerson, secondPerson, count, HP) {
+function generateLog(firstPerson, secondPerson, count) {
+    const {name, damageHP} = firstPerson
     const logs = [
-        `${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага. ${count} [${HP} / 100]`,
-        `${firstPerson.name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага. ${count} [${HP} / 100]`,
-        `${firstPerson.name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил. ${count} [${HP} / 100]`,
-        `${firstPerson.name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар. ${count} [${HP} / 100]`,
-        `${firstPerson.name} поперхнулся, но в это время ${secondPerson.name} нехотя раздробил кулаком \<вырезанно цензурой\> противника. ${count} [${HP} / 100]`,
-        `${firstPerson.name} удивился, а ${secondPerson.name} пошатнувшись влепил подлый удар. ${count} [${HP} / 100]`,
-        `${firstPerson.name} высморкался, но неожиданно ${secondPerson.name} провел дробящий удар. ${count} [${HP} / 100]`,
-        `${firstPerson.name} пошатнулся, и внезапно наглый ${secondPerson.name} беспричинно ударил в ногу противника ${count} [${HP} / 100]`,
-        `${firstPerson.name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника. ${count} [${HP} / 100]`,
-        `${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику. ${count} [${HP} / 100]`
+        `${name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага. ${count} [${damageHP} / 100]`,
+        `${name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага. ${count} [${damageHP} / 100]`,
+        `${name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил. ${count} [${damageHP} / 100]`,
+        `${name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар. ${count} [${damageHP} / 100]`,
+        `${name} поперхнулся, но в это время ${secondPerson.name} нехотя раздробил кулаком \<вырезанно цензурой\> противника. ${count} [${damageHP} / 100]`,
+        `${name} удивился, а ${secondPerson.name} пошатнувшись влепил подлый удар. ${count} [${damageHP} / 100]`,
+        `${name} высморкался, но неожиданно ${secondPerson.name} провел дробящий удар. ${count} [${damageHP} / 100]`,
+        `${name} пошатнулся, и внезапно наглый ${secondPerson.name} беспричинно ударил в ногу противника ${count} [${damageHP} / 100]`,
+        `${name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника. ${count} [${damageHP} / 100]`,
+        `${name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику. ${count} [${damageHP} / 100]`
     ];
 
 
@@ -82,7 +83,7 @@ function renderProgressbarHP(){
     this.elProgressbar.style.width = this.damageHP + '%'
 }
 function changeHP(count, fatality = 0){
-    countRound++
+
 
    if(fatality === 1 || this.damageHP <= count){
        btnBallLightning.disabled = true
@@ -97,9 +98,9 @@ function changeHP(count, fatality = 0){
    }
 
     this.renderHP()
-    const log = this === enemy ?  generateLog(this, character, count, this.damageHP) : generateLog( this, enemy, count, this.damageHP)
+    const log = this === enemy ?  generateLog(this, character, count) : generateLog( this, enemy, count)
     const p = document.createElement('p')
-    p.innerText = `Удар ${countRound}: ${log}`
+    p.innerText = `${log}`
     logs.insertBefore(p, logs.children[0])
 
 }
