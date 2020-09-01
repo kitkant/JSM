@@ -1,8 +1,9 @@
 import Pokemon from "./pokemon.js";
+import random from "./utils.js"
+
+
 const btnKick = document.getElementById('btn-kick')
 const btnBallLightning = document.getElementById('btn-ball_lightning')
-const logs = document.querySelector('#logs')
-
 
 const player1 = new Pokemon({
     name: 'Pikachu',
@@ -25,17 +26,17 @@ function countKickF() {
         return countKick++
     }
 }
-let countt = countKickF()
+let count = countKickF()
 
 
 btnKick.addEventListener('click',function () {
 
-    player1.changeHP(random(20), function (count) {
-        console.log('Урон', count)
-        console.log(generateLog(player1, player2, count))
+    player1.changeHP(random(20), function (number) {
+        console.log('Урон', number)
+        console.log(generateLog(player1, player2, number))
     })
     player2.changeHP(random(20))
-    let c = countt()
+    let c = count()
     console.log(`Удар ${c}/6`)
     if(c === 6)
     {
@@ -48,7 +49,7 @@ btnKick.addEventListener('click',function () {
 btnBallLightning.addEventListener('click', () => {
 
     player2.changeHP(50)
-    let c = countt()
+    let c = count()
     console.log(`Удар ${c}/6`)
     if(c === 6)
     {
@@ -56,7 +57,6 @@ btnBallLightning.addEventListener('click', () => {
         btnBallLightning.disabled = true
     }
 })
-
 function generateLog(firstPerson, secondPerson, count) {
     const {name, hp: { current, total} } = firstPerson
     const{ name: enemyName} = player2
@@ -74,8 +74,7 @@ function generateLog(firstPerson, secondPerson, count) {
     ];
     return logs[random(logs.length) - 1]
 }
-function random(num){
-    return Math.ceil(Math.random() * num)
-}
+
+
 
 
