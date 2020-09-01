@@ -3,8 +3,17 @@ const btnBallLightning = document.getElementById('btn-ball_lightning')
 const logs = document.querySelector('#logs')
 
 let fatality = 0
+let countKickToEnd = 1
 
 
+
+function countKickF() {
+    let countKick = 1
+    return function () {
+        return countKick++
+    }
+}
+let count = countKickF()
 
 const character = {
     name: 'Pikachu',
@@ -34,10 +43,25 @@ btnKick.addEventListener('click',function () {
 
     character.changeHP(random(15))
     enemy.changeHP(random(20))
+
+    let c = count()
+    console.log(`Удар ${c}/6`)
+    if(c === 6)
+    {
+        btnKick.disabled = true
+        btnBallLightning.disabled = true
+    }
 })
 btnBallLightning.addEventListener('click', () => {
     fatality++
     enemy.changeHP(50,  fatality)
+    let c = count()
+    console.log(`Удар ${c}/6`)
+    if(c === 6)
+    {
+        btnKick.disabled = true
+        btnBallLightning.disabled = true
+    }
 })
 
 function generateLog(firstPerson, secondPerson, count) {
