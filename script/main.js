@@ -1,62 +1,76 @@
-import Pokemon from "./pokemon.js";
-import random from "./utils.js"
+import Pokemon from "./pokemon.js"
+import {random, countKickF} from "./utils.js"
+import {pokemons} from "./pokemons.js"
+
+const pokemonImg = document.getElementById('img-player1')
+const pokemonName = document.getElementById('name-player1')
+
+const randomItem = Math.ceil(Math.random() * pokemons.length - 1)
+const pokemon = pokemons[randomItem]
+const charmander = pokemons.find(item => item.name === 'Charmander')
 
 
-const btnKick = document.getElementById('btn-kick')
-const btnBallLightning = document.getElementById('btn-ball_lightning')
 
-const player1 = new Pokemon({
-    name: 'Pikachu',
-    type: 'electric',
-    hp: 500,
-    selector: 'character'
+pokemonImg.src = pokemon.img
+pokemonName.innerText = pokemon.name
+
+let player1 = new Pokemon({
+    ...pokemon,
+    selector: 'player1'
 })
-const player2 = new Pokemon({
-    name: 'Charmander',
-    type: 'fire',
-    hp: 450,
-    selector: 'enemy'
+let player2 = new Pokemon({
+    ...charmander,
+    selector: 'player2'
 })
-console.log(player1)
-console.log(player2)
 
-function countKickF() {
-    let countKick = 1
-    return function () {
-        return countKick++
-    }
+function startBnt (){
+    const btnStart = document.createElement('button')
+    btnStart.classList.add('button')
+    btnStart.id = 'btn-start'
+    btnStart.innerText = 'Start Game'
+    control.appendChild(btnStart)
 }
+function resetBtn() {
+    const btn = document.createElement('button')
+    btn.classList.add('button')
+    btn.innerText = 'Reset Game'
+    btn.id = 'btn-reset'
+    control.appendChild(btn)
+}
+
+
 let count = countKickF()
+const control = document.querySelector('.control')
+player1.attacks.forEach(item => {
+    const btn = document.createElement('button')
+    btn.classList.add('button')
+    btn.innerText = item.name
+    btn.addEventListener('click', () =>{
+        player1.changeHP(random(20), function (number) {
+            console.log('Урон', number)
+            console.log(generateLog(player1, player2, number))
+        })
+        player2.changeHP(random(20))
+        let c = count()
+        console.log(`Удар ${c}/6`)
+        if(c === 6)
+        {   const allButtons = document.querySelectorAll('.control .button');
+            allButtons.forEach($item => $item.remove());
+            startBnt()
+            resetBtn()
 
+        }
+        console.log('Click btn ', btn.innerText)
 
-btnKick.addEventListener('click',function () {
-
-    player1.changeHP(random(20), function (number) {
-        console.log('Урон', number)
-        console.log(generateLog(player1, player2, number))
     })
-    player2.changeHP(random(20))
-    let c = count()
-    console.log(`Удар ${c}/6`)
-    if(c === 6)
-    {
-        btnKick.disabled = true
-        btnBallLightning.disabled = true
-    }
-
+    control.appendChild(btn)
 
 })
-btnBallLightning.addEventListener('click', () => {
 
-    player2.changeHP(50)
-    let c = count()
-    console.log(`Удар ${c}/6`)
-    if(c === 6)
-    {
-        btnKick.disabled = true
-        btnBallLightning.disabled = true
-    }
-})
+
+
+
+
 function generateLog(firstPerson, secondPerson, count) {
     const {name, hp: { current, total} } = firstPerson
     const{ name: enemyName} = player2
@@ -77,4 +91,36 @@ function generateLog(firstPerson, secondPerson, count) {
 
 
 
+//
+// let count = countKickF()
+//
+//
+// btnKick.addEventListener('click',function () {
+//
+//     player1.changeHP(random(20), function (number) {
+//         console.log('Урон', number)
+//         console.log(generateLog(player1, player2, number))
+//     })
+//     player2.changeHP(random(20))
+//     let c = count()
+//     console.log(`Удар ${c}/6`)
+//     if(c === 6)
+//     {
+//         btnKick.disabled = true
+//         btnBallLightning.disabled = true
+//     }
+//
+//
+// })
+// btnBallLightning.addEventListener('click', () => {
+//
+//     player2.changeHP(50)
+//     let c = count()
+//     console.log(`Удар ${c}/6`)
+//     if(c === 6)
+//     {
+//         btnKick.disabled = true
+//         btnBallLightning.disabled = true
+//     }
+// })
 
