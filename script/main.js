@@ -68,9 +68,6 @@ player1.attacks.forEach(item => {
 })
 
 
-
-
-
 function generateLog(firstPerson, secondPerson, count) {
     const {name, hp: { current, total} } = firstPerson
     const{ name: enemyName} = player2
@@ -90,37 +87,4 @@ function generateLog(firstPerson, secondPerson, count) {
 }
 
 
-
-//
-// let count = countKickF()
-//
-//
-// btnKick.addEventListener('click',function () {
-//
-//     player1.changeHP(random(20), function (number) {
-//         console.log('Урон', number)
-//         console.log(generateLog(player1, player2, number))
-//     })
-//     player2.changeHP(random(20))
-//     let c = count()
-//     console.log(`Удар ${c}/6`)
-//     if(c === 6)
-//     {
-//         btnKick.disabled = true
-//         btnBallLightning.disabled = true
-//     }
-//
-//
-// })
-// btnBallLightning.addEventListener('click', () => {
-//
-//     player2.changeHP(50)
-//     let c = count()
-//     console.log(`Удар ${c}/6`)
-//     if(c === 6)
-//     {
-//         btnKick.disabled = true
-//         btnBallLightning.disabled = true
-//     }
-// })
 
