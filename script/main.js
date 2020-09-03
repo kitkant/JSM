@@ -1,17 +1,17 @@
-import Pokemon from "./pokemon.js"
+import Pokemon from "./pokemon.js";
 import {random, countKickF} from "./utils.js"
-import {pokemons} from "./pokemons.js"
+import {pokemons} from "./pokemons.js";
 
-const pokemonImg = document.getElementById('img-player1')
-const pokemonName = document.getElementById('name-player1')
+const pokemonImg = document.getElementById('img-player1');
+const pokemonName = document.getElementById('name-player1');
+
+
 
 const randomItem = Math.ceil(Math.random() * pokemons.length - 1)
 const pokemon = pokemons[randomItem]
 const charmander = pokemons.find(item => item.name === 'Charmander')
 
-
-
-pokemonImg.src = pokemon.img
+pokemonImg.src = pokemon.img;
 pokemonName.innerText = pokemon.name
 
 let player1 = new Pokemon({
@@ -40,6 +40,7 @@ function resetBtn() {
 
 
 let count = countKickF()
+console.log(pokemon)
 const control = document.querySelector('.control')
 player1.attacks.forEach(item => {
     const btn = document.createElement('button')
@@ -58,6 +59,8 @@ player1.attacks.forEach(item => {
             allButtons.forEach($item => $item.remove());
             startBnt()
             resetBtn()
+
+            // btn.disabled = true
 
         }
         console.log('Click btn ', btn.innerText)
