@@ -1,137 +1,129 @@
-const btnKick = document.getElementById('btn-kick')
-const btnBallLightning = document.getElementById('btn-ball_lightning')
-const logs = document.querySelector('#logs')
+import Pokemon from "./pokemon.js";
+import {random, countKickF} from "./utils.js"
+import {pokemons} from "./pokemons.js";
 
-let fatality = 0
-let countKickToEnd = 1
+const pokemonImg = document.getElementById('img-player1');
+const pokemonName = document.getElementById('name-player1');
 
 
 
-function countKickF() {
-    let countKick = 1
-    return function () {
-        return countKick++
-    }
+const randomItem = Math.ceil(Math.random() * pokemons.length - 1)
+const pokemon = pokemons[randomItem]
+const charmander = pokemons.find(item => item.name === 'Charmander')
+
+pokemonImg.src = pokemon.img;
+pokemonName.innerText = pokemon.name
+
+let player1 = new Pokemon({
+    ...pokemon,
+    selector: 'player1'
+})
+let player2 = new Pokemon({
+    ...charmander,
+    selector: 'player2'
+})
+
+function startBnt (){
+    const btnStart = document.createElement('button')
+    btnStart.classList.add('button')
+    btnStart.id = 'btn-start'
+    btnStart.innerText = 'Start Game'
+    control.appendChild(btnStart)
 }
+function resetBtn() {
+    const btn = document.createElement('button')
+    btn.classList.add('button')
+    btn.innerText = 'Reset Game'
+    btn.id = 'btn-reset'
+    control.appendChild(btn)
+}
+
+
 let count = countKickF()
+console.log(pokemon)
+const control = document.querySelector('.control')
+player1.attacks.forEach(item => {
+    const btn = document.createElement('button')
+    btn.classList.add('button')
+    btn.innerText = item.name
+    btn.addEventListener('click', () =>{
+        player1.changeHP(random(20), function (number) {
+            console.log('Урон', number)
+            console.log(generateLog(player1, player2, number))
+        })
+        player2.changeHP(random(20))
+        let c = count()
+        console.log(`Удар ${c}/6`)
+        if(c === 6)
+        {   const allButtons = document.querySelectorAll('.control .button');
+            allButtons.forEach($item => $item.remove());
+            startBnt()
+            resetBtn()
 
-const character = {
-    name: 'Pikachu',
-    defaultHP: 100,
-    damageHP: 100,
-    elHP: document.getElementById('health-character'),
-    elProgressbar: document.getElementById('progressbar-character'),
-    renderHPLife: renderHPLife,
-    renderProgressbarHP: renderProgressbarHP,
-    changeHP: changeHP,
-    renderHP: renderHP
-}
+            // btn.disabled = true
 
-const enemy = {
-    name: 'Charmander',
-    defaultHP: 100,
-    damageHP: 100,
-    elHP: document.getElementById('health-enemy'),
-    elProgressbar: document.getElementById('progressbar-enemy'),
-    renderHPLife: renderHPLife,
-    renderProgressbarHP: renderProgressbarHP,
-    changeHP: changeHP,
-    renderHP: renderHP
-}
+        }
+        console.log('Click btn ', btn.innerText)
 
-btnKick.addEventListener('click',function () {
+    })
+    control.appendChild(btn)
 
-    character.changeHP(random(15))
-    enemy.changeHP(random(20))
-
-    let c = count()
-    console.log(`Удар ${c}/6`)
-    if(c === 6)
-    {
-        btnKick.disabled = true
-        btnBallLightning.disabled = true
-    }
 })
-btnBallLightning.addEventListener('click', () => {
-    fatality++
-    enemy.changeHP(50,  fatality)
-    let c = count()
-    console.log(`Удар ${c}/6`)
-    if(c === 6)
-    {
-        btnKick.disabled = true
-        btnBallLightning.disabled = true
-    }
-})
+
+
+
+
 
 function generateLog(firstPerson, secondPerson, count) {
-    const {name, damageHP} = firstPerson
+    const {name, hp: { current, total} } = firstPerson
+    const{ name: enemyName} = player2
     const logs = [
-        `${name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага. ${count} [${damageHP} / 100]`,
-        `${name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага. ${count} [${damageHP} / 100]`,
-        `${name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил. ${count} [${damageHP} / 100]`,
-        `${name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар. ${count} [${damageHP} / 100]`,
-        `${name} поперхнулся, но в это время ${secondPerson.name} нехотя раздробил кулаком \<вырезанно цензурой\> противника. ${count} [${damageHP} / 100]`,
-        `${name} удивился, а ${secondPerson.name} пошатнувшись влепил подлый удар. ${count} [${damageHP} / 100]`,
-        `${name} высморкался, но неожиданно ${secondPerson.name} провел дробящий удар. ${count} [${damageHP} / 100]`,
-        `${name} пошатнулся, и внезапно наглый ${secondPerson.name} беспричинно ударил в ногу противника ${count} [${damageHP} / 100]`,
-        `${name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника. ${count} [${damageHP} / 100]`,
-        `${name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику. ${count} [${damageHP} / 100]`
+        `${name} вспомнил что-то важное, но неожиданно ${enemyName}, не помня себя от испуга, ударил в предплечье врага. ${count} [${current} / ${total}]`,
+        `${name} поперхнулся, и за это ${enemyName} с испугу приложил прямой удар коленом в лоб врага. ${count} [${current} / ${total}]`,
+        `${name} забылся, но в это время наглый ${enemyName}, приняв волевое решение, неслышно подойдя сзади, ударил. ${count} [${current} / ${total}]`,
+        `${name} пришел в себя, но неожиданно ${enemyName} случайно нанес мощнейший удар. ${count} [${current} / 100]`,
+        `${name} поперхнулся, но в это время ${enemyName} нехотя раздробил кулаком \<вырезанно цензурой\> противника. ${count} [${current} / ${total}]`,
+        `${name} удивился, а ${enemyName} пошатнувшись влепил подлый удар. ${count} [${current} / ${total}]`,
+        `${name} высморкался, но неожиданно ${enemyName} провел дробящий удар. ${count} [${current} / ${total}]`,
+        `${name} пошатнулся, и внезапно наглый ${enemyName} беспричинно ударил в ногу противника ${count} [${current} / ${total}]`,
+        `${name} расстроился, как вдруг, неожиданно ${enemyName} случайно влепил стопой в живот соперника. ${count} [${current} / ${total}]`,
+        `${name} пытался что-то сказать, но вдруг, неожиданно ${enemyName} со скуки, разбил бровь сопернику. ${count} [${current} / ${total}]`
     ];
-
-
     return logs[random(logs.length) - 1]
 }
 
 
-function init(enemy, character) {
 
-    character.renderHP()
-    enemy.renderHP()
+//
+// let count = countKickF()
+//
+//
+// btnKick.addEventListener('click',function () {
+//
+//     player1.changeHP(random(20), function (number) {
+//         console.log('Урон', number)
+//         console.log(generateLog(player1, player2, number))
+//     })
+//     player2.changeHP(random(20))
+//     let c = count()
+//     console.log(`Удар ${c}/6`)
+//     if(c === 6)
+//     {
+//         btnKick.disabled = true
+//         btnBallLightning.disabled = true
+//     }
+//
+//
+// })
+// btnBallLightning.addEventListener('click', () => {
+//
+//     player2.changeHP(50)
+//     let c = count()
+//     console.log(`Удар ${c}/6`)
+//     if(c === 6)
+//     {
+//         btnKick.disabled = true
+//         btnBallLightning.disabled = true
+//     }
+// })
 
-}
-
-function renderHP() {
-
-    this.renderHPLife()
-    this.renderProgressbarHP()
-
-}
-
-function renderHPLife() {
-
-    this.elHP.innerText = this.damageHP + ' / ' + this.defaultHP
-}
-
-function renderProgressbarHP(){
-    this.elProgressbar.style.width = this.damageHP + '%'
-}
-function changeHP(count, fatality = 0){
-
-
-   if(fatality === 1 || this.damageHP <= count){
-       btnBallLightning.disabled = true
-   }
-    if(this.damageHP <= count){
-       this.damageHP = 0
-       alert(this.name +' проиграл')
-       btnKick.disabled = true
-   } else {
-
-       this.damageHP -= count
-   }
-
-    this.renderHP()
-    const log = this === enemy ?  generateLog(this, character, count) : generateLog( this, enemy, count)
-    const p = document.createElement('p')
-    p.innerText = `${log}`
-    logs.insertBefore(p, logs.children[0])
-
-}
-
-function random(num){
-    return Math.ceil(Math.random() * num)
-}
-
-
-init(enemy, character)

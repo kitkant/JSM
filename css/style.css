@@ -273,6 +273,7 @@ body {
 }
 
 .button {
+    margin-right: 10px;
     position: relative;
     background: white;
     border: 2px solid #ffc55b;
